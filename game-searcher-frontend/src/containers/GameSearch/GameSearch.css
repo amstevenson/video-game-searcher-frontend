@@ -1,0 +1,23 @@
+.GameSearch ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.GameSearch li {
+    display: inline-block;
+    margin: 20px;
+}
+
+.GameSearch a {
+    text-decoration: none;
+    color: black;
+}
+
+.GameSearch a:hover,
+.GameSearch a:active,
+.GameSearch a.active {
+    color: #fa923F;
+}
