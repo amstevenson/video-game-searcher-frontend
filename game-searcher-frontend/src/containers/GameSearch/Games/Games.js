@@ -8,16 +8,15 @@ const games = (props) => {
     
     useEffect( () => {
 
-        axios('/games')
+        axios.get('/games/0') // Offset of 0, will need to ammend later to feed in the right one
             .then( response => {
-                console.log('[Games.js] ' + response)
+                console.log('[Games.js] Successful response: ' + response.data)
 
             } )
             .catch(error => {
                 console.log('[Games.js] ' + error);
             });
         }
-
     )
 
     let games = <p style={{textAlign: 'center'}}>Something went wrong!</p>;
