@@ -1,28 +1,76 @@
 import React, {useState, useEffect} from 'react';
 import axios from '../../../axios';
 import './Games.css'
+import Game from '../../../components/Game'
 
 const games = (props) => {
 
-    const [error, setError] = useState(0); // initialise state
+    const [data, setData] = useState({
+        games: []
+    }); 
+    const [error, setError] = useState(true);
     
-    useEffect( () => {
+    // useEffect( () => {
 
-        axios.get('/games/0/70') // Offset of 0, will need to ammend later to feed in the right one
-            .then( response => {
-                console.log('[Games.js] Successful response: ' + response.data)
+        // axios.get('/games/0/70') // Offset of 0, will need to ammend later to feed in the right one
+        //     .then( response => {
+                
+        //         const updatedGames = response.data.map(updatedGame => {
+        //             return {
+        //                 ...updatedGame
+        //             }
+        //         })
 
-            } )
-            .catch(error => {
-                console.log('[Games.js] ' + error);
-            });
-        }
-    )
+        //         console.log(updatedGames)
+                
+        //         // setData(updatedGames)
+
+        //         // return updatedGames
+        //     }, [setData(null)])
+        //     .catch(error => {
+        //         console.log('[Games.js] ' + error);
+        //         error = true;
+        //     });
+        // }
+
+
+    // )
+
+    useEffect(() => {   
+        const fetchData = async () => {
+            const result = await axios(
+            '/games/0/70',
+            );
+            
+            console.log('[Games.js] status of code for all games is: ' + result.status)
+
+            setData(result.data);
+            setError(false)
+        };
+    
+        fetchData();
+
+    }, []);
 
     let games = <p style={{textAlign: 'center'}}>Something went wrong!</p>;
     if (!error) {
 
         console.log('[Games.js] no error found, showing list of games')
+
+        if(data) {
+            console.log('derpa')
+            console.log(data[0])
+            console.log(data[0].collection)
+        }
+
+        games = data.map(game => {
+            return <Game
+                key={game.id}
+                name={game.name}
+                summary={game.summary}>
+
+            </Game>
+        })
 
         // games = this.state.games.map(game => {
             
@@ -32,12 +80,12 @@ const games = (props) => {
         //                 author={post.author}
         //                 clicked={() => this.postSelectedHandler(post.id)}  />
         // });
+
     }
 
     return (
         <div>
             <section className="Games">
-                <div>Games list</div>
                 {games}
             </section>
             {/* <Route path={this.props.match.url + '/:id'} exact component={FullPost} />  */}

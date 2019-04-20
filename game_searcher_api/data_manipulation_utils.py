@@ -42,7 +42,7 @@ def get_genres_and_screenshots(igdb_game_json):
 
 def add_genres_and_screenshots_to_games_list(all_genres_dict, all_game_screenshots, igdb_game_json):
     for game in igdb_game_json:
-
+        
         # Add a dict of genre names for json object
         game['genre_names'] = [all_genres_dict[genre_id] for genre_id in game['genres']]
 
@@ -55,25 +55,14 @@ def add_genres_and_screenshots_to_games_list(all_genres_dict, all_game_screensho
 
 def convert_igdb_json_to_usable_format(igdb_game_json):
     """
-    Modifications to list:
+    Modify the list of games coming back from idgb to include information about genre name
+    and screenshots (the url, name, width and height etc)
 
-	created_at		- returned as actual string date
-	genres			- returned as actual category (using /genres/meta to get list)
-	rating			- if present, not on every one
-	screenshots 	- as a list, first one used for main page (/screenshots using array of id's)
-                      with details included related to the url and size of each. 
-	summary 		- shown on main page
-	storyline		- if present, shown when clicked on
-	updated_at 		- return as an actual date string
-    url             - return if there (find out more info)
-
+    Modifications to retrieved game list are made to the mutable list that is passed through
+    as the first parameter. 
     """
-    # Modifications to retrieved game list are made to the mutable list that is passed through
-    # as the first parameter. 
     all_genres_dict, all_game_screenshots = get_genres_and_screenshots(igdb_game_json)
 
     add_genres_and_screenshots_to_games_list(all_genres_dict, all_game_screenshots, igdb_game_json)
 
     return igdb_game_json
-
-
