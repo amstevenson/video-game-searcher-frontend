@@ -18,7 +18,7 @@ def all_games(offset, rating):
 
         formatted_games = convert_igdb_json_to_usable_format(all_games_json)
 
-        return Response(response=json.dumps(IGDB().get_all_games(offset, rating).text),
+        return Response(response=json.dumps(formatted_games),
                         mimetype='application/json', 
                         status=200,
                         headers={'Access-Control-Allow-Origin': '*',

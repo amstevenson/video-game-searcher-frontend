@@ -12,40 +12,67 @@ def get_all_genres_dict(all_genres_json):
 
     return genre_dict
 
+def get_game_ids(igdb_game_json, all_genres_dict):
+
+    return tuple(game['id'] for game in igdb_game_json)
+
+def get_genres_and_screenshots(igdb_game_json):
+    idgb_service = IGDB()
+
+    # Get all Genres. The result of the games search has each genre as an ID; so we need the right name value.
+    all_genres = idgb_service.get_all_genres()
+
+    # All genres comes back as an array of json objects, which doesn't make it too easy to 
+    # add the name value to the games list as we go back through, so we need an easier way of doing that
+    all_genres_dict = get_all_genres_dict(json.loads(all_genres.text))
+
+    # Each game comes back with a list of screenshots, however, these all come back as Id's too. 
+    # So we need to make a list of game ID's to send across in another request in order to get the 
+    # list of image id url's.
+    #
+    # Whilst looping through to get these URL's we can also add the genre names above. 
+    #
+    game_ids = get_game_ids(igdb_game_json, all_genres_dict)
+
+    # With the Game ID's, get the screenshots with yet another call to IGDB
+    # Note: IGDB need the games to be a tuple list
+    all_game_screenshots = json.loads(idgb_service.get_all_screenshots(game_ids).text)
+
+    return all_genres_dict, all_game_screenshots
+
+def add_genres_and_screenshots_to_games_list(all_genres_dict, all_game_screenshots, igdb_game_json):
+    for game in igdb_game_json:
+
+        # Add a dict of genre names for json object
+        game['genre_names'] = [all_genres_dict[genre_id] for genre_id in game['genres']]
+
+        for screenshot in all_game_screenshots:
+            if screenshot['game'] == game['id']:
+                if 'screenshot_info' in game:
+                    game['screenshot_info'].append(screenshot)
+                else: 
+                    game['screenshot_info'] = [screenshot]
+
 def convert_igdb_json_to_usable_format(igdb_game_json):
     """
-    Want
+    Modifications to list:
 
-	id				- number
-	category		- returned as actual category
 	created_at		- returned as actual string date
 	genres			- returned as actual category (using /genres/meta to get list)
-	name			- string (no manip needed)
-	popularity		- number (no manip needed)
 	rating			- if present, not on every one
 	screenshots 	- as a list, first one used for main page (/screenshots using array of id's)
+                      with details included related to the url and size of each. 
 	summary 		- shown on main page
 	storyline		- if present, shown when clicked on
 	updated_at 		- return as an actual date string
     url             - return if there (find out more info)
 
     """
+    # Modifications to retrieved game list are made to the mutable list that is passed through
+    # as the first parameter. 
+    all_genres_dict, all_game_screenshots = get_genres_and_screenshots(igdb_game_json)
 
-    # Get all Genres. The result of the games search has each genre as an ID; so we need the right name value.
-    start_time = time.time()
-    all_genres = IGDB().get_all_genres()
-    print("--- %s seconds to get all genres ---" % (time.time() - start_time))
-
-    # All genres comes back as an array of json objects, which doesn't make it too easy to 
-    # add the name value to the games list as we go back through, so we need an easier way of doing that
-    start_time = time.time()
-    all_genres_dict = get_all_genres_dict(json.loads(all_genres.text))
-    print("--- %s seconds to get all genres as a dict lookup ---" % (time.time() - start_time))
-
-    # Each game comes back with a list of screenshots, however, these all come back as Id's too. 
-    # So we need to make a list of game ID's to send across in another request in order to get the 
-    # list of image id url's.
-    
+    add_genres_and_screenshots_to_games_list(all_genres_dict, all_game_screenshots, igdb_game_json)
 
     return igdb_game_json
 
