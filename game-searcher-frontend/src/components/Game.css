@@ -1,12 +1,18 @@
 .Game {
     width: 40%;
     padding: 16px;
+    height: 500px;
+    overflow: auto;
     text-align: center;
     border: 1px solid #eee;
     box-shadow: 0 2px 3px #ccc;
-    margin: 10px;
+    margin: 20px;
     box-sizing: border-box;
     cursor: pointer;
+}
+
+.image {
+    width: 25%;
 }
 
 .Game:hover,

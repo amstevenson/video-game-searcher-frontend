@@ -52,22 +52,19 @@ const games = (props) => {
 
     }, []);
 
-    let games = <p style={{textAlign: 'center'}}>Something went wrong!</p>;
+    let games = <p style={{textAlign: 'center'}}>Loading games...</p>;
     if (!error) {
 
         console.log('[Games.js] no error found, showing list of games')
 
-        if(data) {
-            console.log('derpa')
-            console.log(data[0])
-            console.log(data[0].collection)
-        }
+        console.log(data)
 
         games = data.map(game => {
             return <Game
                 key={game.id}
                 name={game.name}
-                summary={game.summary}>
+                summary={game.summary}
+                screenshots={game.screenshot_info}>
 
             </Game>
         })
