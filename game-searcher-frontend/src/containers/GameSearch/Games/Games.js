@@ -8,7 +8,7 @@ const games = (props) => {
     
     useEffect( () => {
 
-        axios.get('/games/0') // Offset of 0, will need to ammend later to feed in the right one
+        axios.get('/games/0/70') // Offset of 0, will need to ammend later to feed in the right one
             .then( response => {
                 console.log('[Games.js] Successful response: ' + response.data)
 
