@@ -6,52 +6,79 @@ import GameSearchForm from '../../../components/SearchForm/GamesSearchForm/Games
 
 const games = (props) => {
 
-    const [data, setData] = useState({
+    const [games, setGames] = useState({
         games: []
     }); 
+    const [genres, setGenres] = useState({
+        genres: []
+    });
     const [loading, setLoading] = useState(true);
     const [offset, setOffset] = useState(0);
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(70);
+    const [refresh, setRefresh] = useState(false);
+    const [genre, setGenre] = useState(0);
     
-    useEffect(() => {   
+    // Get all Genres
+    useEffect(() => {
         const fetchData = async () => {
 
             const result = await axios(
-            '/games/' + offset + '/70',
+            '/games/genres'
             );
-            
-            console.log('[Games.js] status of code for all games is: ' + result.status)
 
-            setData(result.data);
-            setLoading(false)
+            console.log('[Games.js] status of code for all genres is: ' + result.status)
 
-            console.log('[Games.js] no error found, showing list of games')
-
-            console.log(data)    
+            setGenres(result.data);
         };
     
         fetchData();
 
-    }, [offset, rating] ); // second param prevents second render on launch
-                           // In this case, it only updates when the offset/rating state changes
+    }, [] ); // We only want this to be called on load
+
+    // Get all Games
+    useEffect(() => {   
+        const fetchData = async () => {
+
+            const result = await axios(
+            '/games/' + offset + '/' + rating + '/' + genre,
+            );
+            
+            console.log('[Games.js] Rating is: ' + rating + ' and offset is: ' + offset)
+            console.log('[Games.js] status of code for all games is: ' + result.status)
+
+            setGames(result.data);
+            setLoading(false) 
+        };
+    
+        fetchData();
+
+    }, [refresh] ); // second param prevents second render on launch
+                    // In this case, it only updates when the refresh state changes
     
     const updateGameSearchEventHandler = () => {
-
-        console.log('Triggering refresh of games with offset: ' + offsetValue)
-        setOffset(offsetValue);
+        setRefresh(true);
     }
 
-    const updateOffsetValue = (propsOffsetValue) => {
-
-        console.log('updating offset value with : ' + propsOffsetValue)
-
-        offsetValue = propsOffsetValue
+    const updateOffsetValueEventHandler = (propsOffsetValue) => {
+        setOffset(propsOffsetValue);
+        setRefresh(false);
     }
 
-    let games = <p style={{textAlign: 'center'}}>Loading games...</p>;
+    const updateRatingValueEventHandler = (propsRatingValue) => {
+        setRating(propsRatingValue);
+        setRefresh(false);
+    } 
+
+    const updateGenreValueEventHandler = (propsGenreValue) => {
+        setGenre(propsGenreValue);
+        setRefresh(false);
+    } 
+
+    let gamesList = <p style={{textAlign: 'center'}}>Loading games...</p>;
+    let genreList = null;
     if (!loading) {
 
-        games = data.map(game => {
+        gamesList = games.map(game => {
             return <Game
                 key={game.id}
                 name={game.name}
@@ -61,23 +88,27 @@ const games = (props) => {
                 rating={game.rating}
                 ratingCount={game.rating_count}>
             </Game>
-        })
+        });
+
+        genreList = genres.map(genre => {
+            return <option key={genre.id} value={genre.id}>{genre.name}</option>
+        });
     }
     
-    let offsetValue = 0;
-
     return (
         <div>
             <GameSearchForm 
-                updateOffsetValueEvent={(e) => updateOffsetValue(e.target.value)} 
-                updateGamesEvent={() => updateGameSearchEventHandler()}/>
+                updateOffsetValueEvent={(e) => updateOffsetValueEventHandler(e.target.value)} 
+                updateRatingValueEvent={(e) => updateRatingValueEventHandler(e.target.value)}
+                updateGamesEvent={() => updateGameSearchEventHandler()}
+                updateGenreValueEvent={(e) => updateGenreValueEventHandler(e.target.value)}
+                genreList = {genreList} />
             <section className="Games">
-                {games}
+                {gamesList}
             </section>
             {/* <Route path={this.props.match.url + '/:id'} exact component={FullPost} />  */}
         </div>
     );
-
 }
 
 export default games;
