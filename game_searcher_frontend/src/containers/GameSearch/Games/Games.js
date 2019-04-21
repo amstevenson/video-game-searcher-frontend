@@ -60,7 +60,7 @@ const games = (props) => {
     }
 
     const updateOffsetValueEventHandler = (propsOffsetValue) => {
-        setOffset(propsOffsetValue);
+        setOffset(propsOffsetValue * 8);
         setRefresh(false);
     }
 
