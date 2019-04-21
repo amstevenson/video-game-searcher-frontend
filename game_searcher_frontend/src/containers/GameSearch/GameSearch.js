@@ -5,8 +5,6 @@ import Games from './Games/Games'
 
 const gameSearch = () => {
 
-    
-
     return (
         <div className="GameSearch">
             <header>
@@ -15,12 +13,12 @@ const gameSearch = () => {
                     <NavLink 
                         exact 
                         to="/games"
-                        activeClassName="active">Games</NavLink>
+                        activeClassName="active">All Games</NavLink>
                     <NavLink to={{
                         pathname: '/new-game', 
                         hash: '#submit',
                         search: '?quick-submit=true' // Where we are going to when we click
-                    }}>New Post</NavLink>
+                    }}>Upcoming Games</NavLink>
                     <div className="topnav-right">
                         <NavLink to={{
                             pathname: '/new-game', 
@@ -43,8 +41,6 @@ const gameSearch = () => {
 
             </header>
         
-            
-
         </div>
     )
 }

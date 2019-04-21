@@ -3,6 +3,12 @@ import './Game.css';
 
 const game = (props) => {
 
+    const firstReleaseDate = (typeof props.firstReleaseDate !== 'undefined') ? 
+        <p>Released: {props.firstReleaseDate}</p> : null
+
+    const rating = (typeof props.rating !== 'undefined') ? 
+        <p>Rating: {Math.floor(props.rating).toPrecision(4)}</p> : null
+
     const screenshots = (typeof props.screenshots !== 'undefined') ? 
         <img className="image" src={props.screenshots[0].url}
              alt={props.screenshots[0].alt}></img> : null
@@ -12,8 +18,10 @@ const game = (props) => {
             <div className="Info">
 
                 {screenshots}
+                {firstReleaseDate}
+                {rating}
 
-                <div className="Name">{props.summary}</div>
+                <div className="Summary">{props.summary}</div>
             </div>
         </article>
 };

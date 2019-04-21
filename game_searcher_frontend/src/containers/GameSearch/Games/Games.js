@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import axios from '../../../axios';
 import './Games.css'
-import Game from '../../../components/Game'
+import Game from '../../../components/Game/Game'
+import GameSearchForm from '../../../components/SearchForm/GamesSearchForm/GamesSearchForm'
 
 const games = (props) => {
 
@@ -10,6 +11,7 @@ const games = (props) => {
     }); 
     const [loading, setLoading] = useState(true);
     const [offset, setOffset] = useState(0);
+    const [rating, setRating] = useState(0);
     
     useEffect(() => {   
         const fetchData = async () => {
@@ -30,13 +32,20 @@ const games = (props) => {
     
         fetchData();
 
-    }, [offset] ); // second param prevents second render on launch
-                   // In this case, it only updates when the offset state changes
+    }, [offset, rating] ); // second param prevents second render on launch
+                           // In this case, it only updates when the offset/rating state changes
     
-    const updateGameSearchEventHandler = (offset) => {
+    const updateGameSearchEventHandler = () => {
 
-        console.log('Triggering refresh of games with offset: ' + offset)
+        console.log('Triggering refresh of games with offset: ' + offsetValue)
         setOffset(offsetValue);
+    }
+
+    const updateOffsetValue = (propsOffsetValue) => {
+
+        console.log('updating offset value with : ' + propsOffsetValue)
+
+        offsetValue = propsOffsetValue
     }
 
     let games = <p style={{textAlign: 'center'}}>Loading games...</p>;
@@ -47,20 +56,21 @@ const games = (props) => {
                 key={game.id}
                 name={game.name}
                 summary={game.summary}
-                screenshots={game.screenshot_info}>
+                screenshots={game.screenshot_info}
+                firstReleaseDate={game.first_release_date_dmy}
+                rating={game.rating}
+                ratingCount={game.rating_count}>
             </Game>
         })
     }
-
+    
     let offsetValue = 0;
 
     return (
         <div>
-            <form className="searchForm">
-                <input className="searchBox" name="offset" type="text" placeholder="Enter page number..." 
-                       onChange={(e) => offsetValue = (e.target.value * 8)}/> {/* Pages are in multiples of 8 */}
-                <input className="searchButton" type="button" value="Search" onClick={() => updateGameSearchEventHandler(offsetValue)}/>
-            </form>
+            <GameSearchForm 
+                updateOffsetValueEvent={(e) => updateOffsetValue(e.target.value)} 
+                updateGamesEvent={() => updateGameSearchEventHandler()}/>
             <section className="Games">
                 {games}
             </section>

@@ -1,6 +1,7 @@
 from service.igdb import IGDB
 import time
 import json
+import datetime
 
 def get_all_genres_dict(all_genres_json):
     """
@@ -40,12 +41,24 @@ def get_genres_and_screenshots(igdb_game_json):
 
     return all_genres_dict, all_game_screenshots
 
-def add_genres_and_screenshots_to_games_list(all_genres_dict, all_game_screenshots, igdb_game_json):
+def add_modifications_to_json(all_genres_dict, all_game_screenshots, igdb_game_json):
+    """
+    Modifications:
+    1) Add genres to json
+    2) Add screenshots to json
+    3) Convert number datetimes to dates that can be shown on the UI
+    """
     for game in igdb_game_json:
         
         # Add a dict of genre names for json object
         if 'genres' in game:
             game['genre_names'] = [all_genres_dict[genre_id] for genre_id in game['genres']]
+
+        if 'first_release_date' in game: 
+            # game['first_release_date_dmy'] = 
+            game['first_release_date_dmy'] = datetime.datetime.fromtimestamp(
+                game['first_release_date']
+            ).strftime('%Y-%m-%d')
 
         for screenshot in all_game_screenshots:
             if screenshot['game'] == game['id']:
@@ -64,6 +77,6 @@ def convert_igdb_json_to_usable_format(igdb_game_json):
     """
     all_genres_dict, all_game_screenshots = get_genres_and_screenshots(igdb_game_json)
 
-    add_genres_and_screenshots_to_games_list(all_genres_dict, all_game_screenshots, igdb_game_json)
+    add_modifications_to_json(all_genres_dict, all_game_screenshots, igdb_game_json)
 
     return igdb_game_json
