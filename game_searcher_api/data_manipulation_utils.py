@@ -44,7 +44,8 @@ def add_genres_and_screenshots_to_games_list(all_genres_dict, all_game_screensho
     for game in igdb_game_json:
         
         # Add a dict of genre names for json object
-        game['genre_names'] = [all_genres_dict[genre_id] for genre_id in game['genres']]
+        if 'genres' in game:
+            game['genre_names'] = [all_genres_dict[genre_id] for genre_id in game['genres']]
 
         for screenshot in all_game_screenshots:
             if screenshot['game'] == game['id']:

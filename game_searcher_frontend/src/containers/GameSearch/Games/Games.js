@@ -8,56 +8,39 @@ const games = (props) => {
     const [data, setData] = useState({
         games: []
     }); 
-    const [error, setError] = useState(true);
+    const [loading, setLoading] = useState(true);
+    const [offset, setOffset] = useState(0);
     
-    // useEffect( () => {
-
-        // axios.get('/games/0/70') // Offset of 0, will need to ammend later to feed in the right one
-        //     .then( response => {
-                
-        //         const updatedGames = response.data.map(updatedGame => {
-        //             return {
-        //                 ...updatedGame
-        //             }
-        //         })
-
-        //         console.log(updatedGames)
-                
-        //         // setData(updatedGames)
-
-        //         // return updatedGames
-        //     }, [setData(null)])
-        //     .catch(error => {
-        //         console.log('[Games.js] ' + error);
-        //         error = true;
-        //     });
-        // }
-
-
-    // )
-
     useEffect(() => {   
         const fetchData = async () => {
+
             const result = await axios(
-            '/games/0/70',
+            '/games/' + offset + '/70',
             );
             
             console.log('[Games.js] status of code for all games is: ' + result.status)
 
             setData(result.data);
-            setError(false)
+            setLoading(false)
+
+            console.log('[Games.js] no error found, showing list of games')
+
+            console.log(data)    
         };
     
         fetchData();
 
-    }, []);
+    }, [offset] ); // second param prevents second render on launch
+                   // In this case, it only updates when the offset state changes
+    
+    const updateGameSearchEventHandler = (offset) => {
+
+        console.log('Triggering refresh of games with offset: ' + offset)
+        setOffset(offsetValue);
+    }
 
     let games = <p style={{textAlign: 'center'}}>Loading games...</p>;
-    if (!error) {
-
-        console.log('[Games.js] no error found, showing list of games')
-
-        console.log(data)
+    if (!loading) {
 
         games = data.map(game => {
             return <Game
@@ -65,23 +48,19 @@ const games = (props) => {
                 name={game.name}
                 summary={game.summary}
                 screenshots={game.screenshot_info}>
-
             </Game>
         })
-
-        // games = this.state.games.map(game => {
-            
-        //     return <Post 
-        //                 key={post.id}
-        //                 title={post.title} 
-        //                 author={post.author}
-        //                 clicked={() => this.postSelectedHandler(post.id)}  />
-        // });
-
     }
+
+    let offsetValue = 0;
 
     return (
         <div>
+            <form className="searchForm">
+                <input className="searchBox" name="offset" type="text" placeholder="Enter page number..." 
+                       onChange={(e) => offsetValue = (e.target.value * 8)}/> {/* Pages are in multiples of 8 */}
+                <input className="searchButton" type="button" value="Search" onClick={() => updateGameSearchEventHandler(offsetValue)}/>
+            </form>
             <section className="Games">
                 {games}
             </section>

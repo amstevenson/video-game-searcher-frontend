@@ -10,22 +10,29 @@ const gameSearch = () => {
     return (
         <div className="GameSearch">
             <header>
-                <nav>
-                    <ul>
-                        <li><NavLink 
-                            exact 
-                            to="/games"
-                            activeClassName="active"
-                            activeStyle={{
-                                color: '#fa923f',
-                                textDecoration: 'underline'
-                            }}>Games</NavLink></li>
-                        <li><NavLink to={{
-                            pathname: '/new-post', 
+
+                <nav className="topnav">
+                    <NavLink 
+                        exact 
+                        to="/games"
+                        activeClassName="active">Games</NavLink>
+                    <NavLink to={{
+                        pathname: '/new-game', 
+                        hash: '#submit',
+                        search: '?quick-submit=true' // Where we are going to when we click
+                    }}>New Post</NavLink>
+                    <div className="topnav-right">
+                        <NavLink to={{
+                            pathname: '/new-game', 
                             hash: '#submit',
                             search: '?quick-submit=true' // Where we are going to when we click
-                        }}>New Post</NavLink></li>
-                    </ul>
+                        }}>Search</NavLink>
+                        <NavLink to={{
+                        pathname: '/new-game', 
+                        hash: '#submit',
+                        search: '?quick-submit=true' // Where we are going to when we click
+                        }}>About</NavLink>
+                    </div>
                 </nav>
 
                 <Switch>
