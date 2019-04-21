@@ -4,8 +4,11 @@ import './GamesSearchForm.css'
 const gamesSearchForm = (props) => (
     <form className="searchForm">
 
-        <select className="searchBox" name="rating" defaultValue="70" 
-                        onChange={props.updateGenreValueEvent}>
+        <input className="searchBox" type="date" name="date after"
+               placeholder="Games after: " onChange={props.updateAfterDateValueEvent} />       
+
+        <select className="searchBox" name="genre_list" defaultValue="12" 
+                        onChange={props.updateGenreValueEvent} >
             {props.genreList}
         </select>
 
@@ -25,7 +28,7 @@ const gamesSearchForm = (props) => (
             onChange={props.updateOffsetValueEvent}/> {/* Pages are in multiples of 8 */}
         
         <input className="searchButton" type="button" value="Search" onClick={props.updateGamesEvent}/>
-        
+
     </form>
 )
 

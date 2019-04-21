@@ -8,10 +8,10 @@ game = Blueprint('game', __name__)
 
 logger = logging.getLogger()
 
-@game.route("/games/<offset>/<rating>/<genre>", methods=["GET", "OPTIONS"])
-def all_games(offset, rating, genre):
+@game.route("/games/<offset>/<rating>/<genre>/<after_date>", methods=["GET", "OPTIONS"])
+def all_games(offset, rating, genre, after_date):
     try:
-        all_games_json = json.loads(IGDB().get_all_games(offset, rating, genre).text)
+        all_games_json = json.loads(IGDB().get_all_games(offset, rating, genre, after_date).text)
 
         return Response(response=json.dumps(convert_igdb_json_to_usable_format(all_games_json)),
                         mimetype='application/json', 

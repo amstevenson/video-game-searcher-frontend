@@ -16,14 +16,15 @@ const games = (props) => {
     const [offset, setOffset] = useState(0);
     const [rating, setRating] = useState(70);
     const [refresh, setRefresh] = useState(false);
-    const [genre, setGenre] = useState(0);
+    const [genre, setGenre] = useState(13);
+    const [afterDate, setAfterDate] = useState(0);
     
     // Get all Genres
     useEffect(() => {
         const fetchData = async () => {
 
             const result = await axios(
-            '/games/genres'
+                '/games/genres'
             );
 
             console.log('[Games.js] status of code for all genres is: ' + result.status)
@@ -40,10 +41,11 @@ const games = (props) => {
         const fetchData = async () => {
 
             const result = await axios(
-            '/games/' + offset + '/' + rating + '/' + genre,
+                '/games/' + offset + '/' + rating + '/' + genre + '/' + afterDate,
             );
             
-            console.log('[Games.js] Rating is: ' + rating + ' and offset is: ' + offset)
+            console.log('[Games.js] Rating is: ' + rating + ', offset is: ' + offset + 
+                        ', genre is: ' + genre + ', after date is: ' + afterDate)
             console.log('[Games.js] status of code for all games is: ' + result.status)
 
             setGames(result.data);
@@ -74,6 +76,11 @@ const games = (props) => {
         setRefresh(false);
     } 
 
+    const updateAfterDateValueEventHandler = (propsAfterDateValue) => {
+        setAfterDate(Math.floor((new Date(propsAfterDateValue)).getTime() / 1000));
+        setRefresh(false);
+    } 
+
     let gamesList = <p style={{textAlign: 'center'}}>Loading games...</p>;
     let genreList = null;
     if (!loading) {
@@ -100,6 +107,7 @@ const games = (props) => {
             <GameSearchForm 
                 updateOffsetValueEvent={(e) => updateOffsetValueEventHandler(e.target.value)} 
                 updateRatingValueEvent={(e) => updateRatingValueEventHandler(e.target.value)}
+                updateAfterDateValueEvent={(e) => updateAfterDateValueEventHandler(e.target.value)}
                 updateGamesEvent={() => updateGameSearchEventHandler()}
                 updateGenreValueEvent={(e) => updateGenreValueEventHandler(e.target.value)}
                 genreList = {genreList} />

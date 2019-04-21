@@ -24,3 +24,14 @@
     background-color:#fafafa;
     color:#207cca;
 }
+
+input[type="date"]:before {
+    content: attr(placeholder) !important;
+    color: black;
+    margin-right: 0.5em;
+  }
+
+  input[type="date"]:focus:before,
+  input[type="date"]:valid:before {
+    content: "";
+  }
