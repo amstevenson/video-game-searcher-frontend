@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import axios from '../../../axios';
 
 import { connect } from 'react-redux';
@@ -10,104 +10,71 @@ import GameSearchForm from '../../../components/SearchForm/GamesSearchForm/Games
 
 const games = (props) => {
 
-    const [games, setGames] = useState({
-        games: []
-    }); 
-    const [genres, setGenres] = useState({
-        genres: []
-    });
-    const [loading, setLoading] = useState(true);
-    const [offset, setOffset] = useState(0);
-    const [rating, setRating] = useState(70);
-    const [refresh, setRefresh] = useState(false);
-    const [afterDate, setAfterDate] = useState(0);
-    
-    // Get all Genres
     useEffect(() => {
         const fetchData = async () => {
 
+            // Get all genres and construct a list
             const result = await axios(
                 '/games/genres'
             );
 
             console.log('[Games.js] status of code for all genres is: ' + result.status)
-
-            setGenres(result.data);
+            
+            props.onUpdateGenreList(result.data.map(genre => {
+                return <option key={genre.id} value={genre.id}>{genre.name}</option>
+            })) // update the list of genres
         };
     
         fetchData();
 
-    }, [] ); // We only want this to be called on load
+    }, [] );
 
-    // Get all Games
     useEffect(() => {   
         const fetchData = async () => {
 
+            // Get all games based on search parameters and construct a list
+            console.log('[Games.js] Rating is: ' + props.rating + ', offset is: ' + props.offset + 
+                        ', genre is: ' + props.genre + ', after date is: ' + props.afterDate)
+
             const result = await axios(
-                '/games/' + offset + '/' + rating + '/' + props.genre + '/' + afterDate,
+                '/games/' + props.offset + '/' + props.rating + '/' + props.genre + '/' + props.afterDate,
             );
             
-            console.log('[Games.js] Rating is: ' + rating + ', offset is: ' + offset + 
-                        ', genre is: ' + props.genre + ', after date is: ' + afterDate)
             console.log('[Games.js] status of code for all games is: ' + result.status)
+            
+            // Set the list of games
+            props.onUpdateGameList(result.data.map(game => {
+                return <Game
+                    key={game.id}
+                    name={game.name}
+                    summary={game.summary}
+                    screenshots={game.screenshot_info}
+                    firstReleaseDate={game.first_release_date_dmy}
+                    rating={game.rating}
+                    ratingCount={game.rating_count}>
+                </Game>
+            }));
 
-            setGames(result.data);
-            setLoading(false) 
+            props.onSetGamesLoading(false); // remove the label related to loading the game data
         };
     
         fetchData();
 
-    }, [refresh, props.genre] ); 
+    }, [props.searchToggle] ); 
     
-    const updateGameSearchEventHandler = () => {
-        setRefresh(true);
-    }
-
-    // const updateOffsetValueEventHandler = (propsOffsetValue) => {
-    //     setOffset(propsOffsetValue * 8);
-    //     setRefresh(false);
-    // }
-
-    const updateRatingValueEventHandler = (propsRatingValue) => {
-        setRating(propsRatingValue);
-        setRefresh(false);
-    } 
-
-    const updateAfterDateValueEventHandler = (propsAfterDateValue) => {
-        setAfterDate(Math.floor((new Date(propsAfterDateValue)).getTime() / 1000));
-        setRefresh(false);
-    } 
-
-    let gamesList = <p style={{textAlign: 'center'}}>Loading games...</p>;
-    let genreList = null;
-    if (!loading) {
-
-        gamesList = games.map(game => {
-            return <Game
-                key={game.id}
-                name={game.name}
-                summary={game.summary}
-                screenshots={game.screenshot_info}
-                firstReleaseDate={game.first_release_date_dmy}
-                rating={game.rating}
-                ratingCount={game.rating_count}>
-            </Game>
-        });
-
-        genreList = genres.map(genre => {
-            return <option key={genre.id} value={genre.id}>{genre.name}</option>
-        });
-    }
-    
+    // If the game list is loading, set a loading message, else show the list of games
+    let gamesList = props.loading ? <p style={{textAlign: 'center'}}>Loading games...</p> :
+        props.gameList
+ 
     return (
         <div>
             <GameSearchForm 
                 updateOffsetValueEvent={(e) => props.onChangeOffset(e.target.value)} 
-                updateRatingValueEvent={(e) => updateRatingValueEventHandler(e.target.value)}
-                updateAfterDateValueEvent={(e) => updateAfterDateValueEventHandler(e.target.value)}
-                updateGamesEvent={() => updateGameSearchEventHandler()}
+                updateRatingValueEvent={(e) => props.onChangeRating(e.target.value)}
+                updateAfterDateValueEvent={(e) => props.onChangeAfterDate(e.target.value)}
+                updateGamesEvent={() => props.onToggleSearch(props.searchToggle)}
                 updateGenreValueEvent={(e) => props.onChangeGenre(e.target.value)}
-                genreList = {genreList} />
+                genreList = {props.genreList} />
             <section className="Games">
                 {gamesList}
             </section>
@@ -119,7 +86,13 @@ const games = (props) => {
 const mapStateToProps = state => {
     return {
         genre: state.gdr.genre,
-        offsetValue: state.gdr.offsetValue
+        offset: state.gdr.offset,
+        gamesLoading: state.gdr.gamesLoading,
+        rating: state.gdr.rating,
+        searchToggle: state.gdr.searchToggle,
+        afterDate: state.gdr.afterDate,
+        genreList: state.gdr.genreList,
+        gameList: state.gdr.gameList
     }
 };
 
@@ -127,7 +100,13 @@ const mapDispatchToProps = dispatch => {
 
     return {
         onChangeGenre: (genre) => dispatch(actionCreators.add_genre(genre)),
-        onChangeOffset: (offsetValue) => dispatch(actionCreators.update_offset_value(offsetValue))
+        onChangeOffset: (offset) => dispatch(actionCreators.update_offset(offset)),
+        onSetGamesLoading: (gamesLoading) => dispatch(actionCreators.update_games_loading(gamesLoading)),
+        onChangeRating: (rating) => dispatch(actionCreators.update_rating(rating)),
+        onToggleSearch: (toggleSearch) => dispatch(actionCreators.update_search_toggle(toggleSearch)),
+        onChangeAfterDate: (afterDate) => dispatch(actionCreators.update_after_date(afterDate)),
+        onUpdateGenreList: (genreList) => dispatch(actionCreators.update_genre_list(genreList)),
+        onUpdateGameList: (gameList) => dispatch(actionCreators.update_game_list(gameList))
     }
 };
 
