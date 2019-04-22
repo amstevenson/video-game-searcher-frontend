@@ -55,7 +55,6 @@ def add_modifications_to_json(all_genres_dict, all_game_screenshots, igdb_game_j
             game['genre_names'] = [all_genres_dict[genre_id] for genre_id in game['genres']]
 
         if 'first_release_date' in game: 
-            # game['first_release_date_dmy'] = 
             game['first_release_date_dmy'] = datetime.datetime.fromtimestamp(
                 game['first_release_date']
             ).strftime('%Y-%m-%d')

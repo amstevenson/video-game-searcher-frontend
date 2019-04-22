@@ -1,0 +1,2 @@
+export const ADD_GENRE = 'ADD_GENRES';
+export const UPDATE_OFFSET_VALUE = 'UPDATE_OFFSET_VALUE';

@@ -26,10 +26,10 @@ const gameSearch = () => {
                             search: '?quick-submit=true' // Where we are going to when we click
                         }}>Search</NavLink>
                         <NavLink to={{
-                        pathname: '/new-game', 
-                        hash: '#submit',
-                        search: '?quick-submit=true' // Where we are going to when we click
-                        }}>About</NavLink>
+                            pathname: '/new-game', 
+                            hash: '#submit',
+                            search: '?quick-submit=true' // Where we are going to when we click
+                            }}>About</NavLink>
                     </div>
                 </nav>
 
