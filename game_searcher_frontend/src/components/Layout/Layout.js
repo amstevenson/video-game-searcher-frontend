@@ -29,7 +29,7 @@ const gameSearch = () => {
 
                 <Switch>
                     <Route path="/games" exact component={Games} /> 
-                    <Route path="games/:id" exact component={Games} /> 
+                    <Route path="/games/:id" exact component={Games} /> 
                     <Route render={() => <h1>Not found</h1>}/>
                 </Switch>
 
