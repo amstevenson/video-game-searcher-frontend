@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, NavLink, Switch } from 'react-router-dom';
 import './Layout.css';
 import Games from '../../containers/Games/Games'
+import SelectedGame from '../../containers/Games/Game/Game'
 
 const gameSearch = () => {
 
@@ -29,7 +30,7 @@ const gameSearch = () => {
 
                 <Switch>
                     <Route path="/games" exact component={Games} /> 
-                    <Route path="/games/:id" exact component={Games} /> 
+                    <Route path="/games/:id" exact component={SelectedGame} /> 
                     <Route render={() => <h1>Not found</h1>}/>
                 </Switch>
 

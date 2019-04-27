@@ -9,7 +9,8 @@ import { Provider } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
-import gameDataReducer from './store/reducers/gameData';
+import allGamesDataReducer from './store/reducers/allGamesData';
+import oneGameDataReducer from './store/reducers/oneGameData';
 
 axios.interceptors.request.use(request => {
     console.log('[Index.js] request being sent is: ' + request);
@@ -30,7 +31,8 @@ axios.interceptors.response.use(response => {
 });
 
 const rootReducer = combineReducers({
-    gdr: gameDataReducer
+    gdr: allGamesDataReducer,
+    ogdr: oneGameDataReducer
 });
 
 const logger = store => {

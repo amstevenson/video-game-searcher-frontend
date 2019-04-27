@@ -8,4 +8,8 @@ export {
     update_after_date,
     update_genre_list,
     update_game_list
-} from './gameData'
+} from './allGamesData'
+
+export {
+    update_selected_game
+} from './oneGameData'
