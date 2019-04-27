@@ -1,7 +1,7 @@
 .Game {
     width: 40%;
     padding: 16px;
-    height: 500px;
+    height: auto;
     overflow: auto;
     text-align: center;
     border: 1px solid #eee;
@@ -9,10 +9,12 @@
     margin: 20px;
     box-sizing: border-box;
     cursor: pointer;
+    background-color: whitesmoke;
 }
 
 .image {
-    width: 25%;
+    width: 40%;
+    image-rendering: -webkit-optimize-contrast;
 }
 
 .Game:hover,

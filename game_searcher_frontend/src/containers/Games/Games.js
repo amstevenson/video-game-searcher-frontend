@@ -1,12 +1,12 @@
 import React, {useEffect} from 'react';
-import axios from '../../../axios';
+import axios from '../../axios';
 
 import { connect } from 'react-redux';
-import * as actionCreators from '../../../store/actions/index';
+import * as actionCreators from '../../store/actions/index';
 
 import './Games.css'
-import Game from '../../../components/Game/Game'
-import GameSearchForm from '../../../components/SearchForm/GamesSearchForm/GamesSearchForm'
+import Game from '../../components/Game/Game'
+import GameSearchForm from '../../components/SearchForm/GamesSearchForm/GamesSearchForm'
 
 const games = (props) => {
 
@@ -47,11 +47,9 @@ const games = (props) => {
                 return <Game
                     key={game.id}
                     name={game.name}
-                    summary={game.summary}
                     screenshots={game.screenshot_info}
                     firstReleaseDate={game.first_release_date_dmy}
-                    rating={game.rating}
-                    ratingCount={game.rating_count}>
+                    clicked={() => gameSelectedHandler(game.id)}> 
                 </Game>
             }));
 
@@ -62,6 +60,10 @@ const games = (props) => {
 
     }, [props.searchToggle] ); 
     
+    const gameSelectedHandler = (id) => {
+        props.history.push({pathname: '/games/' + id});
+    }
+
     // If the game list is loading, set a loading message, else show the list of games
     let gamesList = props.loading ? <p style={{textAlign: 'center'}}>Loading games...</p> :
         props.gameList
