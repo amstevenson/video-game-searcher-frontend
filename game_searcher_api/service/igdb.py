@@ -24,6 +24,21 @@ class IGDB():
         logging.info('Request status code: {}.'.format(response.status_code))
         return response
     
+    def get_game_by_id(self, id):
+        url = '{}/{}'.format(IGDB_URI, 'games')
+        logging.info('Making a request to get all games with url: {}'.format(url))
+
+        data_string = 'fields *; where id = ({});'.format(id)
+
+        logging.debug('Using data for request to get game by id: {}'.format(data_string))
+
+        response = requests.post(url, headers={'user-key': SECRET_KEY}, 
+                                data=data_string)
+        response.raise_for_status()
+
+        logging.info('Request status code: {}.'.format(response.status_code))
+        return response
+
     def get_all_genres(self):
         url = '{}/{}'.format(IGDB_URI, 'genres')
         logging.info('Making a request to get all genres with url: {}'.format(url))
