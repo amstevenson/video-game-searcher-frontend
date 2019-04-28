@@ -6,3 +6,10 @@ export const update_selected_game = (value) => {
         val: value 
     };
 };
+
+export const update_selected_game_id = (value) => {
+    return {
+        type: actionTypes.UPDATE_SELECTED_GAME_ID,
+        val: value 
+    };
+};

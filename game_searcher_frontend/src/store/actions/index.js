@@ -11,5 +11,6 @@ export {
 } from './allGamesData'
 
 export {
-    update_selected_game
-} from './oneGameData'
+    update_selected_game,
+    update_selected_game_id
+} from './selectedGameData'

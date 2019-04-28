@@ -3,14 +3,9 @@ import './Game.css';
 
 const game = (props) => {
 
-    // const firstReleaseDate = (typeof props.firstReleaseDate !== 'undefined') ? 
-    //     <p>{props.firstReleaseDate}</p> : null
-
-    // const rating = (typeof props.rating !== 'undefined') ? 
-    //     <p>Rating: {Math.floor(props.rating).toPrecision(4)}</p> : null
-
+    /* Sizes of image are t_cover_big, t_original_ t_thumb */
     const screenshots = (typeof props.screenshots !== 'undefined') ? 
-        <img className="image" src={props.screenshots[0].url}
+        <img className="image" src={props.screenshots[0].url.replace("t_thumb", "t_cover_big")}
              alt={props.screenshots[0].alt} /> : null
 
     return <article className="Game" onClick={props.clicked}>

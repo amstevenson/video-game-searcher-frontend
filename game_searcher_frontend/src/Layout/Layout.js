@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, NavLink, Switch } from 'react-router-dom';
 import './Layout.css';
-import Games from '../../containers/Games/Games'
-import SelectedGame from '../../containers/Games/Game/Game'
+import Games from '../containers/Games/Games'
+import SelectedGame from '../containers/Games/Game/Game'
 
 const gameSearch = () => {
 

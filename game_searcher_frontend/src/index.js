@@ -10,7 +10,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 import allGamesDataReducer from './store/reducers/allGamesData';
-import oneGameDataReducer from './store/reducers/oneGameData';
+import oneGameDataReducer from './store/reducers/selectedGameData';
 
 axios.interceptors.request.use(request => {
     console.log('[Index.js] request being sent is: ' + request);

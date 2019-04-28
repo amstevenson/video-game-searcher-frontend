@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../../store/actions/index';
 
 import './Games.css'
-import Game from '../../components/Game/Game'
+import Game from '../../components/AllGames/Game/Game'
 import GameSearchForm from '../../components/SearchForm/GamesSearchForm/GamesSearchForm'
 
 const games = (props) => {
