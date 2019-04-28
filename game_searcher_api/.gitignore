@@ -1,4 +1,0 @@
-venv/*
-secret_key.py
-python_logging.log
-__pycache__
