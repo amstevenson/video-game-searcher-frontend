@@ -11,7 +11,7 @@ const selectedGame = (props) => {
         props.summary : null;
 
     const averageRating = (typeof props.averageRating !== 'undefined') ? 
-        props.averageRating : null;
+        Math.floor(props.averageRating).toPrecision(4) : null;
 
     const url = (typeof props.url !== 'undefined') ? 
         props.url : null;
