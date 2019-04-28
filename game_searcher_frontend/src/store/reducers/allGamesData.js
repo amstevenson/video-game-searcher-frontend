@@ -17,7 +17,7 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.ADD_GENRE:
             return updateObject(state, {genre: action.val})
         case actionTypes.UPDATE_OFFSET:
-            return updateObject(state, {offset: action.val})
+            return updateObject(state, {offset: action.val * 8})
         case actionTypes.UPDATE_GAMES_LOADING:
             return updateObject(state, {gamesLoading: action.val})
         case actionTypes.UPDATE_RATING:
@@ -30,6 +30,8 @@ const reducer = ( state = initialState, action ) => {
             return updateObject(state, {genreList: action.val})
         case actionTypes.UPDATE_GAME_LIST:
             return updateObject(state, {gameList: action.val})
+        default:
+            break;
     }
     return state;
 };

@@ -12,6 +12,8 @@ const reducer = ( state = initialState, action ) => {
             return updateObject(state, {selectedGame: action.val})
         case actionTypes.UPDATE_SELECTED_GAME_ID:
             return updateObject(state, {selectedGameId: action.val})
+        default:
+            break;
     }
     return state;
 };

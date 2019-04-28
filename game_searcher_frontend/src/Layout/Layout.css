@@ -1,16 +1,3 @@
-.Layout ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    text-align: center;
-}
-
-.Layout li {
-    display: inline-block;
-    margin: 20px;
-}
-
 .Layout a {
     text-decoration: none;
     color: black;

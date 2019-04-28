@@ -1,5 +1,6 @@
 import React, {Fragment} from 'react';
 import './Game.css'
+import ImageGallery from './ImageGallery/ImageGallery'
 
 const selectedGame = (props) => {
 
@@ -24,48 +25,6 @@ const selectedGame = (props) => {
     /* Sizes of image are t_cover_big, t_original_ t_thumb */
     const screenshots = (typeof props.screenshots !== 'undefined') ? props.screenshots : null;
 
-    const imageGalleryPictures = props.screenshots.map((screenshot, index) => {
-
-        const imageIndex = (index+1);
-
-        return <Fragment key={screenshot.id}>
-
-            {imageIndex === 1 ? <input type="radio" name="radio-btn" id={"img-" + imageIndex } defaultChecked /> : 
-                <input type="radio" name="radio-btn" id={"img-" + imageIndex } /> }
-
-            <li className="slide-container">
-                <div className="slide">
-                        <img src={screenshot.url.replace("t_thumb", "t_original")} />
-                </div>
-                <div className="slideNav">
-                    <label for={imageIndex === 1 ? 
-                        "img-" + props.screenshots.length : "img-" + (imageIndex - 1)} className="prev">&#x2039;</label>
-
-                    <label for={imageIndex === props.screenshots.length ?
-                        "img-1" : "img-" + (imageIndex + 1)} className="next">&#x203a;</label>
-                </div>
-            </li>
-        </Fragment>
-    });
-
-    const imageGalleryDots = props.screenshots.map((screenshot, index) => {
-        
-        const imageIndex = (index+1)
-
-        return <label for={"img-" + imageIndex} className="slideNav-dot" id={"img-dot-" + imageIndex}></label>
-           
-    });
-
-    const imageGallery = screenshots ? <ul className="slides">
-    
-        {imageGalleryPictures}
-
-        <li className="slideNav-dots">
-            {imageGalleryDots}
-        </li>
-
-    </ul> : null
-
     return (
         <Fragment>
             {/* Sizes of image are t_cover_big, t_original_ t_thumb */}
@@ -82,13 +41,15 @@ const selectedGame = (props) => {
 
             <section className="gameDetails">
                 <p><strong>Genre:</strong> {props.genres.join(', ')}</p>
-                <p><strong>Rating: </strong>{rating}/100 {averageRating ? "( Average: " + averageRating + "/100 " + ")": ""}</p>
+                <p><strong>Rating: </strong>{rating}/100 {averageRating ? 
+                    "(Average: " + averageRating + "/100 " + (ratingCount ? "out of " + ratingCount + " votes)" : ")") :
+                        ""}</p>
                 <p>{summary}</p>
 
                 <a href={url}><button className="button blue large">More Details</button></a>
             </section>
             
-            {imageGallery}
+            <ImageGallery screenshots={screenshots}/>
 
         </Fragment>
     );
